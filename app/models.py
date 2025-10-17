@@ -19,7 +19,7 @@ class Chat(Base): # Permite que un usuario tenga sus conversaciones guardadas
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     updated_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     user = relationship("User")
-    messages = relationship("Message")
+    messages = relationship("Message", back_populates="chat", cascade="all, delete-orphan", passive_deletes=True)
 
 class Message(Base): # Brinda contexto al modelo para respuestas más precisas
     __tablename__ = "messages"
@@ -29,7 +29,7 @@ class Message(Base): # Brinda contexto al modelo para respuestas más precisas
     role = Column(String, nullable=False) # user, assistant o system
     content = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
-    chat = relationship("Chat")
+    chat = relationship("Chat", back_populates="messages")
 
 
 
